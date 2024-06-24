@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import exphbs from 'express-handlebars';
 import home from './routes/home.js';
-import { sendEmail } from './controllers/emailController.js'; 
+import sendEmail from './controllers/emailController.js';
 
 dotenv.config(); 
 

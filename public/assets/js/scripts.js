@@ -84,3 +84,54 @@ document.addEventListener('DOMContentLoaded', function () {
     // Aplica a máscara quando o usuário digita no campo
     inputPhone.addEventListener('keyup', maskPhone);
 });
+
+//Validação do envio do formulário de mensagens
+document.getElementById('contactForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const form = event.target;
+
+    // Reset validation states
+    Array.from(form.elements).forEach(input => {
+        input.classList.remove('is-invalid');
+    });
+
+    // Check validity and show invalid feedback if needed
+    if (!form.checkValidity()) {
+        Array.from(form.elements).forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+            }
+        });
+        return;
+    }
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    try {
+        const response = await fetch('/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, phone, message })
+        });
+
+        if (response.ok) {
+            document.getElementById('submitSuccessMessage').classList.remove('d-none');
+            document.getElementById('submitErrorMessage').classList.add('d-none');
+            setTimeout(() => {
+                form.reset();
+                document.getElementById('submitSuccessMessage').classList.add('d-none');
+            }, 2000)
+        } else {
+            throw new Error('Error sending message');
+        }
+    } catch (error) {
+        document.getElementById('submitSuccessMessage').classList.add('d-none');
+        document.getElementById('submitErrorMessage').classList.remove('d-none');
+    }
+});
