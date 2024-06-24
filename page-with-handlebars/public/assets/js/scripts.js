@@ -52,3 +52,35 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+// maskPhone.js
+
+// Função para aplicar a máscara ao campo de telefone
+function maskPhone() {
+    const inputPhone = document.getElementById("phone");
+    let contactPhone = inputPhone.value;
+
+    // Remove qualquer caracter que não seja dígito
+    contactPhone = contactPhone.replace(/\D/g, '');
+
+    if (contactPhone.length <= 2) {
+        inputPhone.value = `(${contactPhone}`;
+    } else if (contactPhone.length <= 3) {
+        inputPhone.value = `(${contactPhone}) `;
+    } else if (contactPhone.length <= 7) {
+        inputPhone.value = `(${contactPhone.substring(0, 2)}) ${contactPhone.substring(2)}`;
+    } else if (contactPhone.length <= 11) {
+        inputPhone.value = `(${contactPhone.substring(0, 2)}) ${contactPhone.substring(2, 3)} ${contactPhone.substring(3, 7)}-${contactPhone.substring(7)}`;
+    } else {
+        // Se tiver mais de 11 dígitos, corta o excedente
+        inputPhone.value = `(${contactPhone.substring(0, 2)}) ${contactPhone.substring(2, 3)} ${contactPhone.substring(3, 7)}-${contactPhone.substring(7, 11)}`;
+    }
+}
+
+// Aguarda o carregamento completo da página
+document.addEventListener('DOMContentLoaded', function () {
+    const inputPhone = document.getElementById("phone");
+
+    // Aplica a máscara quando o usuário digita no campo
+    inputPhone.addEventListener('keyup', maskPhone);
+});

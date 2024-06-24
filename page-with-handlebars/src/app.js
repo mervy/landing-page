@@ -1,12 +1,13 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path'; 
 import dotenv from 'dotenv';
-import home from './routes/home.js';
 import exphbs from 'express-handlebars';
+import home from './routes/home.js';
+import { sendEmail } from './controllers/emailController.js'; 
 
 dotenv.config(); 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -38,6 +39,8 @@ const publicDirectoryPath = path.join(__dirname, "../public/");
 app.use(express.static(publicDirectoryPath));
 
 app.use('/', home);
+// Rota para enviar o e-mail
+app.post('/send', sendEmail);
 
 app.listen(port, ()=>{
     console.log(`Listening on port ${port}`)
